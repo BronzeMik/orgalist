@@ -1,26 +1,21 @@
 import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
+import dotenv from 'dotenv'
+
+dotenv.config();
+
 
 const app = express();
 const port = 3000;
-
-const db = new pg.Client({
-  user: 'postgres',
-  password: '',
-  host: 'localhost',
-  port: 5432, // default Postgres port
-  database: 'todo'
-});
+const url = process.env.POSTGRES_URL
+const db = new pg.Client(url);
 db.connect();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-let items = [
-  { id: 1, title: "Buy milk" },
-  { id: 2, title: "Finish homework" },
-];
+
 
 app.get("/", async (req, res) => {
   try {
